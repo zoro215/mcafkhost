@@ -3,12 +3,10 @@ const mineflayer = require('mineflayer');
 const serverHost = 'vortexcraftuz.mcsh.io';
 const serverPort = 25565;
 
-const accounts = [
-  { username: 'ZahridinSMP', password: 'shukrona' },
-  { username: 'ItzZaridin____', password: 'shukrona' },
-];
+// Faqat bitta akkaunt ma'lumotlari
+const account = { username: 'ZahridinSMP', password: 'shukrona' };
 
-function startBot(account) {
+function startBot() {
     console.log(`[ULANISH] ${account.username} ulanmoqda...`);
 
     const bot = mineflayer.createBot({
@@ -21,12 +19,12 @@ function startBot(account) {
         keepAlive: true
     });
 
-    // Bot serverga muvaffaqiyatli kirgandagi log
+    // Bot serverga muvaffaqiyatli kirganda
     bot.on('spawn', () => {
         console.log(`[OK] ${account.username} serverga kirdi (Spawn bo'ldi).`);
     });
 
-    // FAQAT LOGIN QILISH QISMI
+    // Faqat login qilish qismi
     bot.on('messagestr', (msg) => {
         const cleanMsg = msg.trim().toLowerCase();
         
@@ -40,16 +38,12 @@ function startBot(account) {
     // Agar bot serverdan uzilib qolsa, 30 soniyadan keyin qayta kiradi
     bot.on('end', (reason) => {
         console.log(`[!] ${account.username} uzildi. 30 soniyadan keyin qayta ulanadi... Sabab: ${reason}`);
-        setTimeout(() => startBot(account), 30000);
+        setTimeout(() => startBot(), 30000);
     });
 
     // Xatoliklar yuz bersa logda ko'rsatish
     bot.on('error', (err) => console.log(`[ERR] ${account.username}: ${err.message}`));
 }
 
-// Botlarni ketma-ket (45 soniya farq bilan) ishga tushirish
-accounts.forEach((acc, index) => {
-    setTimeout(() => {
-        startBot(acc);
-    }, index * 45000); 
-});
+// Botni ishga tushirish
+startBot();
