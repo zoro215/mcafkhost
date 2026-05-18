@@ -5,6 +5,7 @@ const serverPort = 25565;
 
 const accounts = [
   { username: 'ZahridinSMP', password: 'shukrona' },
+  { username: 'ItzZaridin____', password: 'shukrona' },
 ];
 
 function startBot(account) {
