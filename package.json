@@ -6,8 +6,8 @@
     "start": "node bot.js"
   },
   "dependencies": {
-    "mineflayer": "latest",
+    "mineflayer": "^4.22.0",
     "node-telegram-bot-api": "^0.66.0",
-    "minecraft-data": "latest"
+    "minecraft-data": "^3.77.0"
   }
 }
