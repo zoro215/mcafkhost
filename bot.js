@@ -35,10 +35,13 @@ function startBot() {
         }
     });
 
-    // Agar bot serverdan uzilib qolsa, 30 soniyadan keyin qayta kiradi
+    // AGAR SERVERDAN CHIQIB KETSA - 1 DAQIQADAN KEYIN QAYTA KIRISH
     bot.on('end', (reason) => {
-        console.log(`[!] ${account.username} uzildi. 30 soniyadan keyin qayta ulanadi... Sabab: ${reason}`);
-        setTimeout(() => startBot(), 30000);
+        console.log(`[!] ${account.username} uzildi. 1 daqiqa (60 soniya)dan keyin qayta ulanadi... Sabab: ${reason}`);
+        
+        setTimeout(() => {
+            startBot();
+        }, 60000); // 60000 millisekund = 1 daqiqa
     });
 
     // Xatoliklar yuz bersa logda ko'rsatish
