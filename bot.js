@@ -5,11 +5,10 @@ const serverPort = 25565;
 
 const accounts = [
   { username: 'ZahridinSMP', password: 'shukrona' },
-  { username: 'ItzZaridin', password: 'shukrona' },
+  { username: 'ItzZaridin____', password: 'shukrona' },
 ];
 
 function startBot(account) {
-    // To'g'rilandi: Baqtiklar (`) qo'yildi
     console.log(`[ULANISH] ${account.username} ulanmoqda...`);
 
     const bot = mineflayer.createBot({
@@ -22,64 +21,33 @@ function startBot(account) {
         keepAlive: true
     });
 
-    // Anarxiya2 ga o'tish funksiyasi
-    const goToAnarchy = () => {
-        if (bot.entity) {
-            bot.chat('/server smp');
-            console.log(`[MAJBURIY] ${account.username}: /server smp yuborildi.`);
-        }
-    };
+    // Bot serverga muvaffaqiyatli kirgandagi log
+    bot.on('spawn', () => {
+        console.log(`[OK] ${account.username} serverga kirdi (Spawn bo'ldi).`);
+    });
 
-    const goToAFKWarp = () => {
-        if (bot.entity) {
-            bot.chat('/warp afk');
-            console.log(`[WARP] ${account.username}: /warp afk yuborildi.`);
-        }
-    };
-
-    // 1. HUBDAN CHIQA OLMAY QOLSA - XABARLARNI ANALIZ QILISH
+    // FAQAT LOGIN QILISH QISMI
     bot.on('messagestr', (msg) => {
         const cleanMsg = msg.trim().toLowerCase();
         
-        // To'g'rilandi: || operatorlari joyiga qo'yildi
+        // Chatda login so'ralganini aniqlash
         if (cleanMsg.includes('/login') || cleanMsg.includes('login') || cleanMsg.includes('tizimga kirish')) {
             bot.chat(`/login ${account.password}`);
-            return;
-        }
-
-        // Hubda ekanini anglatuvchi xabarlar kelganda
-        if (cleanMsg.includes('hub') || cleanMsg.includes('lobby') || cleanMsg.includes('articraft') || cleanMsg.includes('xush kelibsiz')) {
-            setTimeout(goToAnarchy, 10000); // 10 soniya kutib o'tadi
+            console.log(`[LOGIN] ${account.username} uchun parol yuborildi.`);
         }
     });
 
-    // 2. MAJBURIY TAYMERLAR
-    bot.on('spawn', () => {
-        console.log(`[OK] ${account.username} spawn bo'ldi.`);
-        
-        // Bot har safar kutilmaganda spawn bo'lsa, 15 soniyadan keyin o'tadi
-        setTimeout(goToAnarchy, 15000);
-
-        // HAR 5 DAQIQADA MAJBURIY /server smp
-        setInterval(() => {
-            goToAnarchy();
-        }, 300000);
-
-        // Har 3 soatda /warp afk
-        setInterval(() => {
-            goToAFKWarp();
-        }, 10800000); // To'g'rilandi: 3 soat millisekundda 10,800,000 bo'ladi (bitta nol kam edi)
-    });
-
+    // Agar bot serverdan uzilib qolsa, 30 soniyadan keyin qayta kiradi
     bot.on('end', (reason) => {
-        console.log(`[!] ${account.username} uzildi. 30 soniyadan keyin qayta kiradi... Sabab: ${reason}`);
+        console.log(`[!] ${account.username} uzildi. 30 soniyadan keyin qayta ulanadi... Sabab: ${reason}`);
         setTimeout(() => startBot(account), 30000);
     });
 
+    // Xatoliklar yuz bersa logda ko'rsatish
     bot.on('error', (err) => console.log(`[ERR] ${account.username}: ${err.message}`));
 }
 
-// Botlarni navbat bilan kiritish
+// Botlarni ketma-ket (45 soniya farq bilan) ishga tushirish
 accounts.forEach((acc, index) => {
     setTimeout(() => {
         startBot(acc);
