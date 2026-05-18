@@ -1,2 +1,0 @@
-# phone-for-windows
-Windows
