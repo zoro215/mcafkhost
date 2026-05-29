@@ -3,8 +3,7 @@ const mineflayer = require('mineflayer');
 const serverHost = 'vortexcraftuz.mcsh.io';
 const serverPort = 25565;
 
-// Faqat bitta akkaunt ma'lumotlari
-const account = { username: 'ZahridinSMP', password: 'shukrona' };
+const account = { username: 'million_01', password: 'million' };
 
 function startBot() {
     console.log(`[ULANISH] ${account.username} ulanmoqda...`);
@@ -19,34 +18,41 @@ function startBot() {
         keepAlive: true
     });
 
-    // Bot serverga muvaffaqiyatli kirganda
     bot.on('spawn', () => {
-        console.log(`[OK] ${account.username} serverga kirdi (Spawn bo'ldi).`);
+        console.log(`[OK] ${account.username} serverga kirdi.`);
+        
+        // 5 soniyadan keyin "/server anarxiya" buyrug'ini yuborish
+        setTimeout(() => {
+            bot.chat('/server anarxiya');
+            console.log(`[BUYRUQ] /server anarxiya yuborildi.`);
+        }, 5000); 
     });
 
-    // Faqat login qilish qismi
     bot.on('messagestr', (msg) => {
         const cleanMsg = msg.trim().toLowerCase();
         
-        // Chatda login so'ralganini aniqlash
         if (cleanMsg.includes('/login') || cleanMsg.includes('login') || cleanMsg.includes('tizimga kirish')) {
             bot.chat(`/login ${account.password}`);
             console.log(`[LOGIN] ${account.username} uchun parol yuborildi.`);
         }
     });
 
-    // AGAR SERVERDAN CHIQIB KETSA - 1 DAQIQADAN KEYIN QAYTA KIRISH
+    // Har 1 soatda qayta "/server anarxiya" deb yozish
+    setInterval(() => {
+        if (bot.spawned) {
+            bot.chat('/server anarxiya');
+            console.log(`[VAQT] Har soatlik qayta buyruq yuborildi.`);
+        }
+    }, 3600000); // 3600000 ms = 1 soat
+
     bot.on('end', (reason) => {
-        console.log(`[!] ${account.username} uzildi. 1 daqiqa (60 soniya)dan keyin qayta ulanadi... Sabab: ${reason}`);
-        
+        console.log(`[!] ${account.username} uzildi. 1 daqiqadan keyin qayta ulanadi...`);
         setTimeout(() => {
             startBot();
-        }, 60000); // 60000 millisekund = 1 daqiqa
+        }, 60000);
     });
 
-    // Xatoliklar yuz bersa logda ko'rsatish
     bot.on('error', (err) => console.log(`[ERR] ${account.username}: ${err.message}`));
 }
 
-// Botni ishga tushirish
 startBot();
